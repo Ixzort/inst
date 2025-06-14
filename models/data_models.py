@@ -23,7 +23,8 @@ class InstagramPost:
 
 @dataclass
 class PhotoDescription:
-    """Модель описания фотографии"""
     post_id: int
+    profile_id: int      # добавляем
     description: str
     description_id: Optional[int] = None
+
