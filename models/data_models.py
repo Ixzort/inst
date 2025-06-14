@@ -5,10 +5,12 @@ from typing import Optional, List
 
 @dataclass
 class InstagramProfile:
-    """Модель профиля Instagram"""
     username: str
     followers: int
+    data: Optional[str] = None
+    portret: Optional[str] = None
     profile_id: Optional[int] = None
+
 
 
 @dataclass

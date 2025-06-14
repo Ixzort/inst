@@ -20,16 +20,12 @@ class URLHelper:
 
 
 class DataValidator:
-    """Валидация данных"""
-
     @staticmethod
     def is_valid_image_url(url: str) -> bool:
-        """Проверка корректности URL изображения"""
         if not url:
             return False
-
-        valid_extensions = ['.jpg', '.jpeg', '.png', '.webp']
-        return any(url.lower().endswith(ext) for ext in valid_extensions)
+        # Проверяем наличие .jpg/.jpeg/.png/.webp перед знаком ?
+        return re.search(r'\.(jpg|jpeg|png|webp)(\?|$)', url.lower()) is not None
 
     @staticmethod
     def clean_caption(caption: str) -> str:
