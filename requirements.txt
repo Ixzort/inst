@@ -10,4 +10,6 @@ cryptography    # для шифрования ключей
 httpx
 fastapi
 uvicorn
-typing
+Flask
+gunicorn
+
