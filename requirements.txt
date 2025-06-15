@@ -11,8 +11,11 @@ httpx
 fastapi
 uvicorn
 Flask
-gunicorn
 psycopg2-binary
+Flask
+psycopg2-binary
+gunicorn==20.1.0
+
 
 
 
