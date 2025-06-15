@@ -104,37 +104,36 @@ class InstagramAnalyzer:
         conn.commit()
         conn.close()
 
+
 analyzer = InstagramAnalyzer()
+
 
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy"})
 
+
 @app.route('/webhook', methods=['POST'])
 def handle_telegram_webhook():
-    try:
-        data = request.get_json()
-        username = data.get('username')
-        if not username:
-            return jsonify({"error": "Username is required"}), 400
+    data = request.get_json(force=True, silent=True)
+    logging.info(f"[FLASK] Received JSON: {data}, is_json? {request.is_json}")
 
-        # Аналитика Instagram профиля
-        result = analyzer.process_username(username)
-        if 'error' in result:
-            return jsonify({"status": "error", "message": result['error']}), 500
-        return jsonify({
-            "status": "success",
-            "username": username,
-            "result": result
-        })
-    except Exception as e:
-        app.logger.error(f"Error: {str(e)}")
-        return jsonify({"error": "Internal server error"}), 500
+    username = data.get("username") if isinstance(data, dict) else None
+    if not username:
+        return jsonify({"status": "error", "message": "Username is required"}), 200
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    result = analyzer.process_username(username)
 
+    if "error" in result:
+        logging.info(f"[FLASK] Processing error for @{username}: {result['error']}")
+        return jsonify({"status": "error", "message": result["error"]}), 200
+
+    return jsonify({"status": "success", "username": username, "result": result}), 200
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port, debug=False)
 
 
 
