@@ -104,7 +104,6 @@ class InstagramAnalyzer:
         conn.commit()
         conn.close()
 
-
 analyzer = InstagramAnalyzer()
 
 
@@ -113,19 +112,21 @@ def health_check():
     return jsonify({"status": "healthy"})
 
 
-@app.route('/webhook', methods=['POST'])
-def handle_telegram_webhook():
-    data = request.get_json(force=True, silent=True)
-    logging.info(f"[FLASK] Received JSON: {data}, is_json? {request.is_json}")
+@app.route('/webhook', methods=['GET', 'POST'])
+def handle_webhook():
+    if request.method == 'GET':
+        username = request.args.get('username')
+        logging.info(f"[FLASK] GET request, username from args: {username}")
+    else:
+        data = request.get_json(force=True, silent=True)
+        username = data.get("username") if isinstance(data, dict) else None
+        logging.info(f"[FLASK] POST request, username from JSON: {username}")
 
-    username = data.get("username") if isinstance(data, dict) else None
     if not username:
-        return jsonify({"status": "error", "message": "Username is required"}), 200
+        return jsonify({"status": "error", "message": "Username is required"}), 400
 
     result = analyzer.process_username(username)
-
     if "error" in result:
-        logging.info(f"[FLASK] Processing error for @{username}: {result['error']}")
         return jsonify({"status": "error", "message": result["error"]}), 200
 
     return jsonify({"status": "success", "username": username, "result": result}), 200
