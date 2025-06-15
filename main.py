@@ -18,7 +18,7 @@ class InstagramAnalyzer:
         self.image_processor = ImageProcessorService()
         self.database = DatabaseService()
 
-    def process_username(self, username: str, limit: int = 15):
+    def process_username(self, username: str, limit: int = 100):
         result = {"processed": 0, "messages": []}
         try:
             result["messages"].append(f"🚀 Обработка профиля: @{username}")
