@@ -84,7 +84,7 @@ class InstagramAnalyzer:
 • Пример первого сообщения
 """
         resp = self.image_processor.openai_client.chat.completions.create(
-            model=self.image_processor.model,
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": "Ты — аналитик соцсетей, делай структурированный ответ."},
                 {"role": "user", "content": prompt}
