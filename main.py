@@ -4,6 +4,7 @@ from services.database_service import DatabaseService
 from utils.helpers import DataValidator
 from models.data_models import InstagramProfile, PhotoDescription
 from config.database import DatabaseConfig
+import argparse
 
 class InstagramAnalyzer:
     """Анализ одного Instagram профиля с сохранением описаний изображений"""
@@ -117,9 +118,21 @@ class InstagramAnalyzer:
 
         print("✅ Анализ изображений завершен, описания добавлены!")
 
-#if __name__ == "__main__":
-#   analyzer = InstagramAnalyzer()
-#    analyzer.process_username("hello__marusya", limit=3)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("username", help="Instagram username")
+    parser.add_argument("--limit", type=int, default=3)
+    args = parser.parse_args()
+
+    analyzer = InstagramAnalyzer()
+    analyzer.process_username(args.username, limit=args.limit)
+
+if __name__ == "__main__":
+    main()
+
+
 
 
 
